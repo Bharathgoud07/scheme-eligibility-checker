@@ -1,0 +1,239 @@
+body{
+font-family:'Inter',sans-serif;
+background:#f4f6fb;
+}
+
+.form-wrapper{
+display:flex;
+justify-content:center;
+padding:40px 20px;
+}
+
+.form-card{
+width:100%;
+max-width:680px;
+background:white;
+padding:30px;
+border-radius:14px;
+box-shadow:0 12px 30px rgba(0,0,0,0.08);
+}
+
+/* Header */
+.form-header{
+text-align:center;
+margin-bottom:25px;
+}
+
+.form-header i{
+width:36px;
+height:36px;
+color:#2563eb;
+margin-bottom:8px;
+}
+
+/* Floating labels */
+.floating-group{
+position:relative;
+margin-bottom:20px;
+}
+
+.floating-group input,
+.floating-group select{
+width:100%;
+padding:14px;
+border:1px solid #d1d5db;
+border-radius:8px;
+background:#f9fafb;
+font-size:14px;
+}
+
+.floating-group label{
+position:absolute;
+top:14px;
+left:12px;
+color:#6b7280;
+background:white;
+padding:0 4px;
+transition:0.2s;
+pointer-events:none;
+}
+
+.floating-group input:focus + label,
+.floating-group input:not(:placeholder-shown) + label,
+.floating-group select:focus + label,
+.floating-group select:valid + label{
+top:-8px;
+font-size:12px;
+color:#2563eb;
+}
+
+/* Row */
+.form-row{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:16px;
+}
+
+/* Toggle */
+.toggle-group{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:12px;
+background:#f1f5f9;
+border-radius:10px;
+margin-bottom:12px;
+}
+
+.switch{
+position:relative;
+display:inline-block;
+width:46px;
+height:24px;
+}
+
+.switch input{display:none;}
+
+.slider{
+position:absolute;
+cursor:pointer;
+background:#cbd5e1;
+border-radius:24px;
+top:0;left:0;right:0;bottom:0;
+transition:.3s;
+}
+
+.slider:before{
+content:"";
+position:absolute;
+height:18px;
+width:18px;
+left:3px;
+bottom:3px;
+background:white;
+border-radius:50%;
+transition:.3s;
+}
+
+.switch input:checked + .slider{
+background:#2563eb;
+}
+
+.switch input:checked + .slider:before{
+transform:translateX(22px);
+}
+
+/* Buttons */
+.btn-primary{
+background:#2563eb;
+color:white;
+padding:12px 20px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-weight:500;
+}
+
+.btn-primary:hover{
+background:#1d4ed8;
+}
+
+/* Stepper */
+.stepper-wrapper{
+display:flex;
+justify-content:center;
+margin-top:30px;
+}
+
+.stepper{
+display:flex;
+align-items:center;
+gap:16px;
+}
+
+.circle{
+width:36px;
+height:36px;
+border-radius:50%;
+background:#e5e7eb;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:600;
+}
+
+.step.active .circle{
+background:#2563eb;
+color:white;
+}
+
+.line{
+width:60px;
+height:3px;
+background:#e5e7eb;
+border-radius:3px;
+}
+
+/* Loader */
+.loader-spinner{
+width:24px;
+height:24px;
+border:3px solid #cbd5e1;
+border-top:3px solid #2563eb;
+border-radius:50%;
+animation:spin 1s linear infinite;
+margin:auto;
+}
+
+@keyframes spin{
+to{transform:rotate(360deg);}
+}
+
+.hidden{
+display:none;
+}
+
+.error{
+color:#dc2626;
+font-size:12px;
+display:none;
+}
+.form-step{
+display:none;
+animation:fadeIn 0.35s ease;
+}
+
+.form-step.active{
+display:block;
+}
+
+@keyframes fadeIn{
+from{opacity:0; transform:translateY(10px);}
+to{opacity:1; transform:translateY(0);}
+}
+
+.btn-secondary{
+background:#e5e7eb;
+border:none;
+padding:12px 18px;
+border-radius:8px;
+cursor:pointer;
+}
+
+.step.active .circle{
+background:#2563eb;
+color:white;
+}
+
+.error{
+color:#dc2626;
+font-size:12px;
+margin-top:4px;
+display:none;
+}
+.form-actions {
+    margin-top: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+
+<section class="hero">
+
+    <h1>
+        Government Scheme<br>
+        <span>Eligibility Checker</span>
+    </h1>
+
+    <p>
+        Check your eligibility for various government welfare schemes instantly.
+        Know what you qualify for and which documents you need to apply.
+    </p>
+
+    <a href="/profile/" class="cta-button">
+        Check Eligibility Now →
+    </a>
+
+</section>
+
+<section class="how-section">
+
+    <h2>How It Works</h2>
+
+    <div class="steps">
+
+        <div class="step-card">
+            <div class="icon">👤</div>
+            <h3>Enter Your Details</h3>
+            <p>Provide your personal, economic, and demographic information</p>
+        </div>
+
+        <div class="step-card">
+            <div class="icon">📋</div>
+            <h3>Select Documents</h3>
+            <p>Mark which government documents you currently possess</p>
+        </div>
+
+        <div class="step-card">
+            <div class="icon">📊</div>
+            <h3>Get Results</h3>
+            <p>View your eligibility status for various government schemes</p>
+        </div>
+
+    </div>
+
+</section>
+
+<section class="stats">
+
+    <div class="stat-box">
+        <h2>{{ schemes_count }}+</h2>
+        <p>Schemes Covered</p>
+    </div>
+
+    <div class="stat-box">
+        <h2>{{ documents_count }}</h2>
+        <p>Documents Tracked</p>
+    </div>
+
+    <div class="stat-box">
+        <h2>100%</h2>
+        <p>Free to Use</p>
+    </div>
+
+    <div class="stat-box">
+        <h2>Instant</h2>
+        <p>Results</p>
+    </div>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'documents/css/documents.css' %}">
+
+<div class="stepper-wrapper">
+    <div class="stepper">
+        <div class="step completed">
+            <div class="circle">✓</div>
+            <span>Profile</span>
+        </div>
+        <div class="line active"></div>
+        <div class="step active">
+            <div class="circle">2</div>
+            <span>Documents</span>
+        </div>
+        <div class="line"></div>
+        <div class="step">
+            <div class="circle">3</div>
+            <span>Results</span>
+        </div>
+    </div>
+</div>
+
+<div class="form-wrapper">
+<div class="form-card">
+
+<div class="form-header">
+<h2>Available Documents</h2>
+<p>Select the documents you currently have</p>
+</div>
+
+<div class="top-actions">
+    <div>
+        <button type="button" class="btn-secondary" onclick="selectAll()">Select All</button>
+        <button type="button" class="btn-secondary" onclick="clearAll()">Clear All</button>
+    </div>
+    <div class="counter">
+        <span id="count">0</span> selected
+    </div>
+</div>
+
+<form method="post">
+{% csrf_token %}
+
+{% for category, docs in grouped_docs.items %}
+    {% if docs %}
+        <h4 class="section-title">{{ category|upper }} DOCUMENTS</h4>
+
+        <div class="doc-grid">
+        {% for doc in docs %}
+            <label class="doc-card">
+                <input type="checkbox" name="{{doc.id}}">
+                <div class="doc-content">
+                    <div class="doc-title">{{ doc.name }}</div>
+                    <div class="doc-desc">{{ doc.description }}</div>
+                </div>
+            </label>
+        {% endfor %}
+        </div>
+    {% endif %}
+{% endfor %}
+
+<div class="form-actions">
+    <button type="button" onclick="history.back()" class="btn-back">← Back</button>
+    <button type="submit" class="btn-primary">View Results →</button>
+</div>
+
+</form>
+</div>
+</div>
+
+<script>
+const checkboxes = document.querySelectorAll("input[type='checkbox']");
+const countSpan = document.getElementById("count");
+
+function updateCount(){
+    let total = document.querySelectorAll("input[type='checkbox']:checked").length;
+    countSpan.innerText = total;
+}
+
+checkboxes.forEach(cb=>{
+    cb.addEventListener("change",function(){
+        this.closest(".doc-card").classList.toggle("selected", this.checked);
+        updateCount();
+    });
+});
+
+function selectAll(){
+    checkboxes.forEach(c=>{
+        c.checked = true;
+        c.closest(".doc-card").classList.add("selected");
+    });
+    updateCount();
+}
+
+function clearAll(){
+    checkboxes.forEach(c=>{
+        c.checked = false;
+        c.closest(".doc-card").classList.remove("selected");
+    });
+    updateCount();
+}
+</script>
+
+{% endblock %}

@@ -1,0 +1,171 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'profiles/css/profile_form.css' %}">
+
+<!-- STEPPER -->
+<div class="stepper-wrapper">
+    <div class="stepper">
+        <div class="step active">
+            <div class="circle">1</div>
+            <span>Profile</span>
+        </div>
+        <div class="line"></div>
+        <div class="step">
+            <div class="circle">2</div>
+            <span>Documents</span>
+        </div>
+        <div class="line"></div>
+        <div class="step">
+            <div class="circle">3</div>
+            <span>Results</span>
+        </div>
+    </div>
+</div>
+
+<div class="form-wrapper">
+<div class="form-card">
+
+<div class="form-header">
+<i data-lucide="user"></i>
+<h2>Personal Details</h2>
+<p>Enter your details to check scheme eligibility</p>
+</div>
+
+<form method="post" id="profileForm">
+{% csrf_token %}
+
+<!-- Floating input -->
+<div class="floating-group">
+<input type="text" name="full_name" required>
+<label>Full Name</label>
+<span class="error">Please enter your name</span>
+</div>
+
+<div class="form-row">
+
+<div class="floating-group">
+<input type="number" name="age" required>
+<label>Age</label>
+<span class="error">Enter valid age</span>
+</div>
+
+<div class="floating-group">
+<select name="gender" required>
+<option value=""></option>
+<option>Male</option>
+<option>Female</option>
+<option>Other</option>
+</select>
+<label>Gender</label>
+<span class="error">Select gender</span>
+</div>
+
+</div>
+
+<div class="floating-group">
+<input type="number" name="income" required>
+<label>Annual Income</label>
+<span class="error">Enter income</span>
+</div>
+
+<div class="form-row">
+
+<div class="floating-group">
+<select name="category">
+<option value=""></option>
+<option>General</option>
+<option>OBC</option>
+<option>SC</option>
+<option>ST</option>
+<option>EWS</option>
+</select>
+<label>Category</label>
+</div>
+
+<div class="floating-group">
+<select name="education">
+<option value=""></option>
+<option>Illiterate</option>
+<option>10th</option>
+<option>12th</option>
+<option>Graduate</option>
+<option>Postgraduate</option>
+</select>
+<label>Education</label>
+</div>
+
+</div>
+
+<div class="floating-group">
+<select name="state">
+<option value=""></option>
+<option>Telangana</option>
+<option>Andhra Pradesh</option>
+<option>Karnataka</option>
+<option>Kerala</option>
+<option>Tamil Nadu</option>
+<option>Maharashtra</option>
+<option>Gujarat</option>
+<option>Rajasthan</option>
+<option>Uttar Pradesh</option>
+<option>Bihar</option>
+<option>West Bengal</option>
+<option>Odisha</option>
+<option>Punjab</option>
+<option>Haryana</option>
+<option>Chhattisgarh</option>
+<option>Jharkhand</option>
+<option>Assam</option>
+<option>Delhi</option>
+<option>Himachal Pradesh</option>
+<option>Uttarakhand</option>
+<option>Tripura</option>
+<option>Meghalaya</option>
+<option>Manipur</option>
+<option>Arunachal Pradesh</option>
+<option>Mizoram</option>
+<option>Sikkim</option>
+<option>Goa</option>
+<option>Nagaland</option>
+</select>
+<label>State</label>
+</div>
+
+<!-- Toggles -->
+<div class="toggle-group">
+<span>Rural Resident</span>
+<label class="switch">
+<input type="checkbox" name="rural">
+<span class="slider"></span>
+</label>
+</div>
+
+<div class="toggle-group">
+<span>BPL Household</span>
+<label class="switch">
+<input type="checkbox" name="bpl">
+<span class="slider"></span>
+</label>
+</div>
+
+<div class="form-actions">
+<button type="button" class="btn-secondary" onclick="history.back()">Back</button>
+<button type="submit" class="btn-primary">Continue</button>
+</div>
+
+
+<div id="loader" class="loader hidden">
+<div class="loader-spinner"></div>
+Checking eligibility...
+</div>
+
+</form>
+</div>
+</div>
+
+<script>
+document.getElementById("profileForm").addEventListener("submit", function(){
+    document.getElementById("loader").classList.remove("hidden");
+});
+</script>
+
+

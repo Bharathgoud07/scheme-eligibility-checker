@@ -1,0 +1,318 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Eligibility Results</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'eligibility/css/results.css' %}">
+</head>
+<body>
+
+<div class="page-wrapper">
+
+    <div class="results-container">
+
+        <div class="content-grid">
+
+            <!-- LEFT COLUMN -->
+            <div class="left-column">
+
+        <!-- Progress Tracker -->
+        <div class="progress-tracker">
+            <div class="progress-step completed">
+                <div class="progress-circle">
+                    <i class="fas fa-check"></i>
+                </div>
+                <div class="progress-label">Profile</div>
+            </div>
+            <div class="progress-line"></div>
+            <div class="progress-step completed">
+                <div class="progress-circle">
+                    <i class="fas fa-check"></i>
+                </div>
+                <div class="progress-label">Documents</div>
+            </div>
+            <div class="progress-line"></div>
+            <div class="progress-step active">
+                <div class="progress-circle">3</div>
+                <div class="progress-label">Results</div>
+            </div>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="summary-cards">
+            <div class="summary-card eligible">
+                <div class="card-number">{{ eligible_count }}</div>
+                <div class="card-label">Eligible & Ready</div>
+            </div>
+            <div class="summary-card documents-missing">
+                <div class="card-number">{{ documents_missing_count }}</div>
+                <div class="card-label">Need Documents</div>
+            </div>
+            <div class="summary-card not-eligible">
+                <div class="card-number">{{ not_eligible_count }}</div>
+                <div class="card-label">Not Eligible</div>
+            </div>
+        </div>
+
+        <!-- Applicant Profile Summary -->
+        {% if user_profile %}
+        <div class="profile-summary">
+            <h3><i class="fas fa-user-circle"></i> Applicant Profile Summary</h3>
+            <div class="profile-grid">
+                <div class="profile-item">
+                    <span class="profile-label">Name</span>
+                    <span class="profile-value">{{ user_profile.name }}</span>
+                </div>
+                <div class="profile-item">
+                    <span class="profile-label">Age</span>
+                    <span class="profile-value">{{ user_profile.age }} years</span>
+                </div>
+                <div class="profile-item">
+                    <span class="profile-label">Annual Income</span>
+                    <span class="profile-value">₹{{ user_profile.annual_income }}</span>
+                </div>
+                <div class="profile-item">
+                    <span class="profile-label">Category</span>
+                    <span class="profile-value">{{ user_profile.category }}</span>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Navigation Buttons -->
+        <div class="navigation-buttons">
+            <button class="btn btn-secondary" onclick="goBackToDocuments()">
+                <i class="fas fa-arrow-left"></i> Back to Documents
+            </button>
+            <button class="btn btn-primary" onclick="startOver()">
+                <i class="fas fa-redo"></i> Start Over
+            </button>
+        </div>
+
+            </div>
+
+            <!-- RIGHT COLUMN -->
+            <div class="right-column">
+
+                <!-- Filter Section -->
+                <div class="filter-section">
+            <h2><i class="fas fa-filter"></i> Filter Schemes</h2>
+            
+            <!-- By Category -->
+            <div class="filter-group">
+                <h3>By Category</h3>
+                <div class="filter-buttons">
+                    <button class="filter-btn category-filter active" data-filter="all">
+                        <i class="fas fa-filter"></i> All Categories
+                    </button>
+                    <button class="filter-btn category-filter" data-filter="Education">
+                        <i class="fas fa-book"></i> Education
+                    </button>
+                    <button class="filter-btn category-filter" data-filter="Health">
+                        <i class="fas fa-heart"></i> Health
+                    </button>
+                    <button class="filter-btn category-filter" data-filter="Employment">
+                        <i class="fas fa-briefcase"></i> Employment
+                    </button>
+                    <button class="filter-btn category-filter" data-filter="Housing">
+                        <i class="fas fa-home"></i> Housing
+                    </button>
+                    <button class="filter-btn category-filter" data-filter="Finance">
+                        <i class="fas fa-coins"></i> Finance
+                    </button>
+                    <button class="filter-btn category-filter" data-filter="Women & Child">
+                        <i class="fas fa-child"></i> Women & Child
+                    </button>
+                    <button class="filter-btn category-filter" data-filter="Agriculture">
+                        <i class="fas fa-leaf"></i> Agriculture
+                    </button>
+                    <button class="filter-btn category-filter" data-filter="Social Welfare">
+                        <i class="fas fa-users"></i> Social Welfare
+                    </button>
+                </div>
+            </div>
+
+            <!-- By Target Group -->
+            <div class="filter-group">
+                <h3>By Target Group</h3>
+                <div class="filter-buttons">
+                    <button class="filter-btn target-filter active" data-filter="all">All</button>
+                    <button class="filter-btn target-filter" data-filter="Students">Students</button>
+                    <button class="filter-btn target-filter" data-filter="Women">Women</button>
+                    <button class="filter-btn target-filter" data-filter="Farmers">Farmers</button>
+                    <button class="filter-btn target-filter" data-filter="Minority">Minority</button>
+                    <button class="filter-btn target-filter" data-filter="SC/ST">SC/ST</button>
+                    <button class="filter-btn target-filter" data-filter="BPL">BPL</button>
+                    <button class="filter-btn target-filter" data-filter="Senior Citizens">Senior Citizens</button>
+                    <button class="filter-btn target-filter" data-filter="Youth">Youth</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results-card">
+
+            <h2>Scheme-wise Results</h2>
+            <p class="result-count">Showing <span id="visibleCount">{{ schemes|length }}</span> of {{ total_schemes }} schemes</p>
+
+            <div id="schemesContainer">
+
+            {% for scheme in schemes %}
+
+            <div class="scheme-card {{ scheme.eligible_status }}" 
+                 data-status="{{ scheme.eligible_status }}" 
+                 data-category="{{ scheme.scheme_category }}"
+                 data-target="{{ scheme.target_group }}">
+
+                <div class="scheme-header" onclick="toggleDetails(this)">
+
+                    <div class="scheme-left">
+
+                        <div class="status-icon
+                            {% if scheme.eligible_status == 'eligible' %}success
+                            {% elif scheme.eligible_status == 'documents_missing' %}warning
+                            {% else %}error{% endif %}">
+                            {% if scheme.eligible_status == 'eligible' %}
+                                <i class="fas fa-check-circle"></i>
+                            {% elif scheme.eligible_status == 'documents_missing' %}
+                                <i class="fas fa-exclamation-circle"></i>
+                            {% else %}
+                                <i class="fas fa-times-circle"></i>
+                            {% endif %}
+                        </div>
+
+                        <div class="scheme-info">
+                            <div class="scheme-title">{{ scheme.name }}</div>
+                            <div class="scheme-ministry">{{ scheme.ministry }}</div>
+
+                            <div class="tags">
+                                {% if scheme.category %}
+                                    <span class="tag category-tag">{{ scheme.category }}</span>
+                                {% endif %}
+                                {% if scheme.target_group %}
+                                    <span class="tag target-tag">{{ scheme.target_group }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="status-badge
+                        {% if scheme.eligible_status == 'eligible' %}success
+                        {% elif scheme.eligible_status == 'documents_missing' %}warning
+                        {% else %}error{% endif %}">
+
+                        {% if scheme.eligible_status == 'eligible' %}
+                            <i class="fas fa-chevron-down"></i> Eligible & Ready
+                        {% elif scheme.eligible_status == 'documents_missing' %}
+                            <i class="fas fa-chevron-down"></i> Eligible, Documents Missing
+                        {% else %}
+                            <i class="fas fa-chevron-down"></i> Not Eligible
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+                <div class="scheme-details">
+
+                    <div class="detail-section">
+                        <div class="detail-title">About this scheme</div>
+                        <div class="detail-text">{{ scheme.description }}</div>
+                    </div>
+
+                    <div class="detail-section">
+                        <div class="detail-title">Benefits</div>
+                        <div class="detail-text">{{ scheme.benefits }}</div>
+                    </div>
+
+                    {% if scheme.eligible_status == 'eligible' %}
+                        <div class="msg success">
+                            <i class="fas fa-check-circle"></i> You meet all criteria! You can apply for this scheme.
+                        </div>
+                    {% elif scheme.eligible_status == 'documents_missing' %}
+                        <div class="msg warning">
+                            <i class="fas fa-exclamation-circle"></i> You are eligible! Missing documents: 
+                            {% for doc in scheme.missing_documents %}
+                                {{ doc.name }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="msg error">
+                            <i class="fas fa-times-circle"></i> You are not eligible for this scheme.
+                            {% for reason in scheme.ineligibility_reasons %}
+                                <div>• {{ reason }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+function toggleDetails(header){
+    const card = header.parentElement;
+    card.classList.toggle("open");
+}
+
+function goBackToDocuments(){
+    window.location.href = '/documents/';
+}
+
+function startOver(){
+    window.location.href = '/profile/';
+}
+
+// Filter schemes by category and target group
+function filterSchemes() {
+    const selectedCategory = document.querySelector('.category-filter.active')?.dataset.filter || 'all';
+    const selectedTarget = document.querySelector('.target-filter.active')?.dataset.filter || 'all';
+    
+    let visibleCount = 0;
+    
+    document.querySelectorAll(".scheme-card").forEach(card => {
+        const cardCategory = card.dataset.category;
+        const cardTarget = card.dataset.target;
+        
+        const categoryMatch = selectedCategory === 'all' || cardCategory === selectedCategory;
+        const targetMatch = selectedTarget === 'all' || cardTarget === selectedTarget;
+        
+        if (categoryMatch && targetMatch) {
+            card.style.display = "block";
+            visibleCount++;
+        } else {
+            card.style.display = "none";
+        }
+    });
+    
+    document.getElementById('visibleCount').textContent = visibleCount;
+}
+
+// Add event listeners to category and target filter buttons
+document.querySelectorAll('.category-filter, .target-filter').forEach(btn => {
+    btn.addEventListener('click', function() {
+        // Remove active class from siblings
+        this.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+        // Add active class to clicked button
+        this.classList.add('active');
+        // Filter schemes
+        filterSchemes();
+    });
+});
+</script>
+
+</body>
+</html>
